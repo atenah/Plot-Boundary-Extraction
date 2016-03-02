@@ -24,8 +24,3 @@ x(Longitud): -109.928028
 y(Latitud): 27.397116
 
 
-x (Longitud): -x1 27.383251
-y (Latitud): -y1 109.925809
-
-x (Longitud): -x2 27.382054
-y (Latitud): -y2 109.923994
