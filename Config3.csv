@@ -1,0 +1,13 @@
+,length,width,,,,
+plot_size,2,0.88,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,distance between rows,1.5,,
+,,,distance between columns,0.7,,
+,,,gap between some specified columns,3.1 m,,
+,,,column numbers with gap,"30,31","60,61","90,91"
+,,,,,,
+coordinate of first plot,-109.924006  27.382057 Decimal Degrees,,,,,
+coordinate of last plot,-109.925797  27.383247 Decimal Degrees,,,,,
+plot labels,sample_input3.csv
