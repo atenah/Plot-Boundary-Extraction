@@ -1,9 +1,9 @@
-
 import argparse
 import os
 from os.path import basename
 import math
-from lib.csvfile import  ConfigFile, InputFile
+from lib.csvfile import InputFile
+from lib.configfile import ConfigFile
 import sys
 from lib.xmlbuilder import XmlKmlBuilder
 from lib.timer import Timer
@@ -27,7 +27,6 @@ def add_style_to_folder(f_main, xml):
 
 
 def addstyle_map_to_folder(f_main, xml):
-
     # create `StyleMap`
     sm = xml.create_el_style_map(f_main)
 
@@ -37,7 +36,6 @@ def addstyle_map_to_folder(f_main, xml):
     xml.create_el_styleurl(p, '#s_ylw-pushpin')
 
 def record_cell(xml, f_main, f_points, coords, coord_pt, id_val):
-
     pm = xml.create_el_placemark(f_main)
     xml.create_el_name(pm, id_val)
     xml.create_el_description(pm, id_val)
@@ -81,8 +79,8 @@ def get_coords(x, y, (dx, dy), (xdir, ydir)):
     coord += format(x, ".12f") + "," + format(y+dy*ydir, ".12f") + ",0 "
     coord += format(x, ".12f") + "," + format(y, ".12f") + ",0 "    
     return coord, coord_pt
-def main(conf):
-    
+
+def main(conf, inputFile):
     width = abs(conf.first_coord[0] - conf.last_coord[0])
     height = abs(conf.first_coord[1] - conf.last_coord[1])    
     wm, hm = dec_degrees_to_meters(conf.first_coord, conf.last_coord)
@@ -91,14 +89,14 @@ def main(conf):
     print "Width:", wm, "m"
     print "Height:", hm, "m"
 
-    plots_size = conf.labels.ncols * conf.plot_size[0] + (conf.labels.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, conf.labels.nrows * conf.plot_size[1] + (conf.labels.nrows - 1) * conf.row_dist
+    plots_size = inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
     print "Size based on plot input file", plots_size
 
     scaling_factor = wm/plots_size[0], hm/plots_size[1]
 
     conf.scale(scaling_factor)
     
-    plots_size = conf.labels.ncols * conf.plot_size[0] + (conf.labels.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, conf.labels.nrows * conf.plot_size[1] + (conf.labels.nrows - 1) * conf.row_dist
+    plots_size = inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
     print "Scaled size based on plot input file", plots_size
 
     
@@ -178,7 +176,7 @@ def main(conf):
 #            print x_m, y_m
  #           print x, xlim
             coords, coord_pt = get_coords(x, y, plot_size_degs, (xdir, ydir))
-            record_cell(xml, f_main, f_points, coords, coord_pt, conf.labels.get_zi(row_ind, col_ind))
+            record_cell(xml, f_main, f_points, coords, coord_pt, inputFile.get_zi(row_ind, col_ind))
             
             col_ind += 1
             x += plot_size_degs[0] * xdir
@@ -211,4 +209,5 @@ def main(conf):
 if __name__ == "__main__":
 
     conf = ConfigFile(sys.argv[1])
-    main(conf)
+    inputFile = InputFile(conf.inputFileName)
+    main(conf, inputFile)
