@@ -1,0 +1,88 @@
+<!-- csv2kml DTD Version 1.0.0                                              -->
+<!--                                                                        -->
+<!-- This document type definition (DTD) defines the csv2kml document.  The -->
+<!-- csv2kml document provides settings for the csv2kml.py Python script    -->
+<!-- (specifically, the ConfigFile class inside the configfile.py Python    -->
+<!-- script used by csv2kml.py).                                            -->
+<!--                                                                        -->
+<!-- Author: Peter J. Rosario                                               -->
+<!-- Date:   1 February 2018                                                -->
+<!--                                                                        -->
+<!-- Structure:                                                             -->
+<!--     <csv2kml>                                                          -->
+<!--         <plots>                                                        -->
+<!--             <size>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--                 <vertialMeters>                                        -->
+<!--             <gaps>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--                 <vertialMeters>                                        -->
+<!--         <sections>                                                     -->
+<!--             <gaps>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--             <starts>                                                   -->
+<!--                 <horizontal>                                           -->
+<!--                     <column>                                           -->
+<!--         <coordinates>                                                  -->
+<!--             <first>                                                    -->
+<!--                 <longitudeDecimalDegrees>                              -->
+<!--                 <latitudeDecimalDegrees>                               -->
+<!--             <last>                                                     -->
+<!--                 <longitudeDecimalDegrees>                              -->
+<!--                 <latitudeDecimalDegrees>                               -->
+<!--         <inputFile>                                                    -->
+
+
+<!-- verticalMeters, horizontalMeters: Linear distance in meters either up  -->
+<!-- and down (vertical) or left and right (horizontal).                    -->
+<!ELEMENT verticalMeters   (#PCDATA)>
+<!ELEMENT horizontalMeters (#PCDATA)>
+
+
+<!-- gaps: A gap is space between two things.  Things are either plots or   -->
+<!-- sections.                                                              -->
+<!ELEMENT gaps (verticalMeters*, horizontalMeters)>
+
+
+<!ELEMENT longitudeDecimalDegrees (#PCDATA)>
+<!ELEMENT latitudeDecimalDegrees  (#PCDATA)>
+
+
+<!-- size: Dimensions of each rectangular plot.  All plots will have the    -->
+<!-- same dimensions so therefore all plots will be of the same size.       -->
+<!ELEMENT size (verticalMeters, horizontalMeters)>
+
+<!ELEMENT plots (size, gaps)>
+
+
+<!-- column: If a sections starts with column n, then the gap between sec-  -->
+<!-- tions is after column n-1 and before column n.                         -->
+<!ELEMENT column (#PCDATA)>
+
+<!-- horizontal: Groups left-right starts.                                  -->
+<!ELEMENT horizontal (column+)>
+
+<!-- starts: Indicates where a section begins.  (Actually, indicates where  -->
+<!-- all sections except the first section begins.  (It is not necessary to -->
+<!-- specify where the first section begins since the script assumes the    -->
+<!-- first section begins at 1)).                                           -->
+<!ELEMENT starts (horizontal)>
+
+<!-- sections: Groups of plots.                                             -->
+<!ELEMENT sections (gaps, starts)>
+
+
+<!-- first, last: Top left (first) and bottom right (last) plots.           -->
+<!ELEMENT first (longitudeDecimalDegrees, latitudeDecimalDegrees)>
+<!ELEMENT last  (longitudeDecimalDegrees, latitudeDecimalDegrees)>
+
+<!-- coordinates: Used to locate the data upon Earth's surface.             -->
+<!ELEMENT coordinates (first, last)>
+
+
+<!-- inputFile: Formatted as comman-separated value (.csv).                 -->
+<!ELEMENT inputFile (#PCDATA)>
+
+
+<!-- csv2kml: Root element.                                                 -->
+<!ELEMENT csv2kml (plots, sections, coordinates, inputFile)>

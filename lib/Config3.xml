@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csv2kml>
+    <plots>
+        <size>
+            <verticalMeters>2</verticalMeters>
+            <horizontalMeters>0.88</horizontalMeters>
+        </size>
+
+        <gaps>
+            <verticalMeters>1.5</verticalMeters>
+            <horizontalMeters>0.7</horizontalMeters>
+        </gaps>
+    </plots>
+
+    <sections>
+        <gaps>
+            <horizontalMeters>3.1</horizontalMeters>
+        </gaps>
+
+        <starts>
+            <horizontal>
+                <column>31</column>
+                <column>61</column>
+                <column>91</column>
+            </horizontal>
+        </starts>
+    </sections>
+
+    <coordinates>
+        <first>
+            <longitudeDecimalDegrees>-109.924006</longitudeDecimalDegrees>
+            <latitudeDecimalDegrees>27.382057</latitudeDecimalDegrees>
+        </first>
+
+        <last>
+            <longitudeDecimalDegrees>-109.925797</longitudeDecimalDegrees>
+            <latitudeDecimalDegrees>27.383247</latitudeDecimalDegrees>
+        </last>
+    </coordinates>
+
+    <inputFile>sample_input3.csv</inputFile>
+</csv2kml>
