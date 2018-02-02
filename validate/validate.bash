@@ -1,16 +1,15 @@
 #!/bin/bash
 #
-# lib/validate/validate.bash
+# validate/validate.bash
 #
 # Validate input xml file.
 #
-# Input: Input xml file, .dtd file in lib/validate/, and .xsd file in
-#        lib/validate/.
+# Input: Input xml file, .dtd file in validate/, and .xsd file in validate/.
 #
 # Output: If errors are present then they are output.  If no errors are present
 #         then a success message is output.
 #
-# Used in: lib/validate/validateConfig3.bash
+# Used in: validate/validateConfig3.bash
 
 
 # Initialize ${inputXml}.

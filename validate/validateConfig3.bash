@@ -1,11 +1,10 @@
 #!/bin/bash
 #
-# lib/validate/validateConfig3.bash
+# validate/validateConfig3.bash
 #
 # Validate Config3.xml.
 #
-# Input: lib/Config3.xml, lib/validate/csv2kml.dtd, and
-#        lib/validate/csv2kml.xsd.
+# Input: Config3.xml, validate/csv2kml.dtd, and validate/csv2kml.xsd.
 #
 # Output: If errors are present then they are output.  If no errors then a suc-
 #         cess message is output.
