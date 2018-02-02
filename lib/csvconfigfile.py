@@ -1,7 +1,7 @@
-from lib.configfile import ConfigFile
+import lib.configfile
 import csv
 
-class CSVConfigFile(ConfigFile):
+class CSVConfigFile(lib.configfile.ConfigFile):
     def trim_convert(self, x):
         return float(x.split(" ")[0])
 
