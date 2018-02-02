@@ -3,7 +3,7 @@ import os
 from os.path import basename
 import math
 from lib.csvfile import InputFile
-from lib.configfile import ConfigFile
+from lib.csvconfigfile import CSVConfigFile
 import sys
 from lib.xmlbuilder import XmlKmlBuilder
 from lib.timer import Timer
@@ -208,6 +208,6 @@ def main(conf, inputFile):
 #   -f --input-file
 if __name__ == "__main__":
 
-    conf = ConfigFile(sys.argv[1])
+    conf = CSVConfigFile(sys.argv[1])
     inputFile = InputFile(conf.input_filename)
     main(conf, inputFile)
