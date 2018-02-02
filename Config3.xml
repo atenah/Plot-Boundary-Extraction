@@ -15,6 +15,7 @@
     <sections>
         <optionalGaps>
             <horizontalMeters>3.1</horizontalMeters>
+            <!--verticalMeters>3.1</verticalMeters-->
         </optionalGaps>
 
         <starts>
@@ -23,6 +24,10 @@
                 <column>61</column>
                 <column>91</column>
             </horizontal>
+
+            <!--vertical>
+              <row>5</row>
+            </vertical-->
         </starts>
     </sections>
 
