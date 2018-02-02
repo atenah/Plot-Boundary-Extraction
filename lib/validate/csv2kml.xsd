@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE xs:schema PUBLIC "-//W3C/DTD XMLSCHEMA 200102//EN"
+    "http://www.w3.org/2001/XMLSchema.dtd">
+
+<!-- csv2kml XSD Version 1.0.0                                              -->
+<!--                                                                        -->
+<!-- This XML schema definition defines the csv2kml document.  The csv2kml  -->
+<!-- document provides settings for the csv2kml.py Python script (specifi-  -->
+<!-- cally, the ConfigFile class inside the configfile.py Python script     -->
+<!-- used by csv2kml.py).                                                   -->
+<!--                                                                        -->
+<!-- Author: Peter J. Rosario                                               -->
+<!-- Date:   1 February 2018                                                -->
+<!--                                                                        -->
+<!-- Structure:                                                             -->
+<!--     <csv2kml>                                                          -->
+<!--         <plots>                                                        -->
+<!--             <size>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--                 <vertialMeters>                                        -->
+<!--             <gaps>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--                 <vertialMeters>                                        -->
+<!--         <sections>                                                     -->
+<!--             <gaps>                                                     -->
+<!--                 <horizontalMeters>                                     -->
+<!--             <starts>                                                   -->
+<!--                 <horizontal>                                           -->
+<!--                     <column>                                           -->
+<!--         <coordinates>                                                  -->
+<!--             <first>                                                    -->
+<!--                 <longitudeDecimalDegrees>                              -->
+<!--                 <latitudeDecimalDegrees>                               -->
+<!--             <last>                                                     -->
+<!--                 <longitudeDecimalDegrees>                              -->
+<!--                 <latitudeDecimalDegrees>                               -->
+<!--         <inputFile>                                                    -->
+
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+attributeFormDefault="qualified" elementFormDefault="qualified">
+    <xs:simpleType name="NonNegativeFloat">
+        <xs:restriction base="xs:float">
+            <xs:minInclusive value="0.0" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="PositiveInteger">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="DecimalDegrees">
+        <xs:restriction base="xs:float">
+            <xs:minInclusive value="-180.0" />
+            <xs:maxInclusive value="+180.0" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <!-- verticalMeters, horizontalMeters: Linear distance in meters either -->
+    <!-- up and down (vertical) or left and right (horizontal).             -->
+    <xs:element name="verticalMeters"   type="NonNegativeFloat" />
+    <xs:element name="horizontalMeters" type="NonNegativeFloat" />
+
+
+    <!-- gaps: A gap is space between two things.  Things are either plots  -->
+    <!-- or sections.                                                       -->
+    <xs:element name="gaps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="1" ref="verticalMeters" />
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="horizontalMeters" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="longitudeDecimalDegrees" type="DecimalDegrees" />
+    <xs:element name="latitudeDecimalDegrees"  type="DecimalDegrees" />
+
+
+    <!-- size: Dimensions of each rectangular plot.  All plots will have    -->
+    <!-- the same dimensions so therefore all plots will be of the same     -->
+    <!-- size.                                                              -->
+    <xs:element name="size">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="verticalMeters" />
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="horizontalMeters" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="plots">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="size" />
+                <xs:element minOccurs="1" maxOccurs="1" ref="gaps" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!-- column: If a sections starts with column n, then the gap between   -->
+    <!-- sections is after column n-1 and before column n.                  -->
+    <xs:element name="column" type="PositiveInteger" />
+
+    <!-- horizontal: Groups left-right starts.                              -->
+    <xs:element name="horizontal">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="unbounded" ref="column" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- starts: Indicates where a section begins.  (Actually, indicates    -->
+    <!-- where all sections except the first section begins.  (It is not    -->
+    <!-- necessary to specify where the first section begins since the      -->
+    <!-- script assumes the first section begins at 1)).                    -->
+    <xs:element name="starts">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="horizontal" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- sections: Groups of plots.                                         -->
+    <xs:element name="sections">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="gaps"   />
+                <xs:element minOccurs="1" maxOccurs="1" ref="starts" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!-- first, last: Top left (first) and bottom right (last) plots.       -->
+    <xs:element name="first">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="longitudeDecimalDegrees" />
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="latitudeDecimalDegrees" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="last">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="longitudeDecimalDegrees" />
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="latitudeDecimalDegrees" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- coordinates: Used to locate the data upon Earth's surface.         -->
+    <xs:element name="coordinates">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="first" />
+                <xs:element minOccurs="1" maxOccurs="1" ref="last"  />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="inputFileName" type="xs:string" />
+
+
+    <!-- csv2kml: Root element.                                             -->
+    <xs:element name="csv2kml">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="plots"         />
+                <xs:element minOccurs="1" maxOccurs="1" ref="sections"      />
+                <xs:element minOccurs="1" maxOccurs="1" ref="coordinates"   />
+                <xs:element minOccurs="1" maxOccurs="1" ref="inputFileName" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
