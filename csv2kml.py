@@ -209,5 +209,5 @@ def main(conf, inputFile):
 if __name__ == "__main__":
 
     conf = ConfigFile(sys.argv[1])
-    inputFile = InputFile(conf.inputFileName)
+    inputFile = InputFile(conf.input_filename)
     main(conf, inputFile)
