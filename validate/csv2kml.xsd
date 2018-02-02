@@ -18,16 +18,19 @@
 <!--         <plots>                                                        -->
 <!--             <size>                                                     -->
 <!--                 <horizontalMeters>                                     -->
-<!--                 <vertialMeters>                                        -->
-<!--             <gaps>                                                     -->
+<!--                 <verticalMeters>                                       -->
+<!--             <requiredGaps>                                             -->
 <!--                 <horizontalMeters>                                     -->
-<!--                 <vertialMeters>                                        -->
+<!--                 <verticalMeters>                                       -->
 <!--         <sections>                                                     -->
-<!--             <gaps>                                                     -->
+<!--             <optionalGaps>                                             -->
 <!--                 <horizontalMeters>                                     -->
+<!--                 <verticalMeters>                                       -->
 <!--             <starts>                                                   -->
 <!--                 <horizontal>                                           -->
 <!--                     <column>                                           -->
+<!--                 <vertical>                                             -->
+<!--                     <row>                                              -->
 <!--         <coordinates>                                                  -->
 <!--             <first>                                                    -->
 <!--                 <longitudeDecimalDegrees>                              -->
@@ -35,7 +38,7 @@
 <!--             <last>                                                     -->
 <!--                 <longitudeDecimalDegrees>                              -->
 <!--                 <latitudeDecimalDegrees>                               -->
-<!--         <inputFile>                                                    -->
+<!--         <inputFileName>                                                -->
 
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -70,11 +73,20 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
 
     <!-- gaps: A gap is space between two things.  Things are either plots  -->
     <!-- or sections.                                                       -->
-    <xs:element name="gaps">
+    <xs:element name="requiredGaps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="1" ref="verticalMeters" />
+                <xs:element minOccurs="1" maxOccurs="1"
+                    ref="horizontalMeters" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="optionalGaps">
         <xs:complexType>
             <xs:sequence>
                 <xs:element minOccurs="0" maxOccurs="1" ref="verticalMeters" />
-                <xs:element minOccurs="1" maxOccurs="1"
+                <xs:element minOccurs="0" maxOccurs="1"
                     ref="horizontalMeters" />
             </xs:sequence>
         </xs:complexType>
@@ -101,8 +113,8 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
     <xs:element name="plots">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="1" maxOccurs="1" ref="size" />
-                <xs:element minOccurs="1" maxOccurs="1" ref="gaps" />
+                <xs:element minOccurs="1" maxOccurs="1" ref="size"         />
+                <xs:element minOccurs="1" maxOccurs="1" ref="requiredGaps" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -121,6 +133,19 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
         </xs:complexType>
     </xs:element>
 
+    <!-- row: If a sections starts with row n, then the gap between sec-    -->
+    <!-- tions is after row n-1 and before row n.                           -->
+    <xs:element name="row" type="PositiveInteger" />
+
+    <!-- vertical: Groups top-bottom starts.                               -->
+    <xs:element name="vertical">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="1" maxOccurs="unbounded" ref="row" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <!-- starts: Indicates where a section begins.  (Actually, indicates    -->
     <!-- where all sections except the first section begins.  (It is not    -->
     <!-- necessary to specify where the first section begins since the      -->
@@ -128,7 +153,8 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
     <xs:element name="starts">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="1" maxOccurs="1" ref="horizontal" />
+                <xs:element minOccurs="0" maxOccurs="1" ref="horizontal" />
+                <xs:element minOccurs="0" maxOccurs="1" ref="vertical"   />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -137,8 +163,8 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
     <xs:element name="sections">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="1" maxOccurs="1" ref="gaps"   />
-                <xs:element minOccurs="1" maxOccurs="1" ref="starts" />
+                <xs:element minOccurs="1" maxOccurs="1" ref="optionalGaps" />
+                <xs:element minOccurs="1" maxOccurs="1" ref="starts"       />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -185,7 +211,7 @@ attributeFormDefault="qualified" elementFormDefault="qualified">
         <xs:complexType>
             <xs:sequence>
                 <xs:element minOccurs="1" maxOccurs="1" ref="plots"         />
-                <xs:element minOccurs="1" maxOccurs="1" ref="sections"      />
+                <xs:element minOccurs="0" maxOccurs="1" ref="sections"      />
                 <xs:element minOccurs="1" maxOccurs="1" ref="coordinates"   />
                 <xs:element minOccurs="1" maxOccurs="1" ref="inputFileName" />
             </xs:sequence>

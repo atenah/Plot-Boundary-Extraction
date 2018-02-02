@@ -10,5 +10,4 @@
 #         cess message is output.
 
 builtin declare -r selfDir="${0%/*}"                # delete shortest end match
-command "${selfDir}/validate.bash" "${selfDir}/../Config3.xml" \
-  "${selfDir}/csv2kml"
+command "${selfDir}/validate.bash" "${selfDir}/../Config3.xml" "csv2kml"
