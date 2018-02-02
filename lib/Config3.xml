@@ -38,5 +38,5 @@
         </last>
     </coordinates>
 
-    <inputFile>sample_input3.csv</inputFile>
+    <inputFileName>sample_input3.csv</inputFileName>
 </csv2kml>

@@ -81,8 +81,8 @@
 
 
 <!-- inputFile: Formatted as comman-separated value (.csv).                 -->
-<!ELEMENT inputFile (#PCDATA)>
+<!ELEMENT inputFileName (#PCDATA)>
 
 
 <!-- csv2kml: Root element.                                                 -->
-<!ELEMENT csv2kml (plots, sections, coordinates, inputFile)>
+<!ELEMENT csv2kml (plots, sections, coordinates, inputFileName)>
