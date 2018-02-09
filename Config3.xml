@@ -6,16 +6,17 @@
             <horizontalMeters>0.88</horizontalMeters>
         </size>
 
-        <gaps>
+        <requiredGaps>
             <verticalMeters>1.5</verticalMeters>
             <horizontalMeters>0.7</horizontalMeters>
-        </gaps>
+        </requiredGaps>
     </plots>
 
     <sections>
-        <gaps>
+        <optionalGaps>
             <horizontalMeters>3.1</horizontalMeters>
-        </gaps>
+            <!--verticalMeters>3.1</verticalMeters-->
+        </optionalGaps>
 
         <starts>
             <horizontal>
@@ -23,6 +24,10 @@
                 <column>61</column>
                 <column>91</column>
             </horizontal>
+
+            <!--vertical>
+              <row>5</row>
+            </vertical-->
         </starts>
     </sections>
 
