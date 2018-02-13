@@ -2,8 +2,8 @@
 <!--                                                                        -->
 <!-- This document type definition (DTD) defines the csv2kml document.  The -->
 <!-- csv2kml document provides settings for the csv2kml.py Python script    -->
-<!-- (specifically, the ConfigFile class inside the configfile.py Python    -->
-<!-- script used by csv2kml.py).                                            -->
+<!-- (specifically, the XMLConfigFile class inside the xmlconfigfile.py Py- -->
+<!-- thon script used by csv2kml.py).                                       -->
 <!--                                                                        -->
 <!-- Author: Peter J. Rosario                                               -->
 <!-- Date:   1 February 2018                                                -->
