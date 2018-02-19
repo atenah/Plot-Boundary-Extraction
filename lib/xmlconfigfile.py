@@ -1,4 +1,5 @@
 import lib.configfile
+import validate
 import xml.etree.ElementTree
 
 class XMLConfigFile(lib.configfile.ConfigFile):
@@ -54,6 +55,9 @@ class XMLConfigFile(lib.configfile.ConfigFile):
 
 
     def __init__(self, filename):
+        validate.validate(filename, "validate/csv2kml.dtd",
+        "validate/csv2kml.xsd")
+
         elementTree = xml.etree.ElementTree.parse(filename)
 
         self.find_plots      (elementTree.find("plots"      ))
