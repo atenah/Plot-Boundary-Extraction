@@ -1,12 +1,7 @@
-import argparse
-import os
-from os.path import basename
-import math
 from lib.csvfile import InputFile
 from lib.xmlconfigfile import XMLConfigFile
 import sys
 from lib.xmlbuilder import XmlKmlBuilder
-from lib.timer import Timer
 from math import cos, radians
 
 def add_style_to_folder(f_main, xml):
