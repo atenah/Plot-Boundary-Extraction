@@ -1,12 +1,7 @@
-import argparse
-import os
-from os.path import basename
-import math
 from lib.csvfile import InputFile
 from lib.xmlconfigfile import XMLConfigFile
 import sys
 from lib.xmlbuilder import XmlKmlBuilder
-from lib.timer import Timer
 from math import cos, radians
 
 def add_style_to_folder(f_main, xml):
@@ -56,18 +51,10 @@ def record_cell(xml, f_main, f_points, coords, coord_pt, id_val):
 
 
 #formulas from https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
-def dec_degrees_to_meters((x1, y1), (x2, y2)):
-    mean_lat = radians((y1 + y2) * 0.5)
-    xdist = abs((x2 - x1) * (111412.84 * cos(mean_lat) - 93.5 * cos(3*mean_lat) + 0.118 * cos(5*mean_lat)))
-    ydist = abs((y2 - y1) * (111132.92 - 558.92 * cos(2*mean_lat) + 1.175*cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
-    return xdist, ydist
-
-
-#formulas from https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
 def meters_to_dec_degrees((dx, dy), mean_lat):
     mean_lat = radians(mean_lat)
     xdist = abs(dx / (111412.84 * cos(mean_lat) - 93.5 * cos(3*mean_lat) + 0.118 * cos(5*mean_lat)))
-    ydist = abs(dy / (111132.92 - 558.92 * cos(2*mean_lat) + 1.175*cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
+    ydist = abs(dy / (111132.92 - 558.92 * cos(2*mean_lat) + 1.175 * cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
     return xdist, ydist
     
 
@@ -80,29 +67,40 @@ def get_coords(x, y, (dx, dy), (xdir, ydir)):
     coord += format(x, ".12f") + "," + format(y, ".12f") + ",0 "    
     return coord, coord_pt
 
-def main(conf, inputFile):
-    width = abs(conf.first_coord[0] - conf.last_coord[0])
-    height = abs(conf.first_coord[1] - conf.last_coord[1])    
-    wm, hm = dec_degrees_to_meters(conf.first_coord, conf.last_coord)
 
+#formulas from https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
+def dec_degrees_to_meters((x1, y1), (x2, y2)):
+    mean_lat = radians((y1 + y2) * 0.5)
+    xdist = abs((x2 - x1) * (111412.84 * cos(mean_lat) - 93.5 * cos(3*mean_lat) + 0.118 * cos(5*mean_lat)))
+    ydist = abs((y2 - y1) * (111132.92 - 558.92 * cos(2*mean_lat) + 1.175 * cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
     
-    print "Width:", wm, "m"
-    print "Height:", hm, "m"
+    print "Width:" , xdist, "m"
+    print "Height:", ydist, "m"
 
-    plots_size = inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
+    return xdist, ydist
+
+
+def compute_plots_size(inputFile, conf):
+    nspecial_cols = len(conf.special_cols)
+    return inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - nspecial_cols) * conf.col_dist + nspecial_cols * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
+
+
+def main(conf, inputFile):
+    widthInMeters, heightInMeters = dec_degrees_to_meters(conf.first_coord, conf.last_coord)
+
+    plots_size = compute_plots_size(inputFile, conf)
     print "Size based on plot input file", plots_size
 
-    scaling_factor = wm/plots_size[0], hm/plots_size[1]
-
-    conf.scale(scaling_factor)
+    conf.scale(widthInMeters/plots_size[0], heightInMeters/plots_size[1])
     
-    plots_size = inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
+    plots_size = compute_plots_size(inputFile, conf)
     print "Scaled size based on plot input file", plots_size
 
     
-    plot_size_degs = meters_to_dec_degrees(conf.plot_size, 0.5*(conf.first_coord[1] + conf.last_coord[1]))
-    plot_gap_degs = meters_to_dec_degrees((conf.col_dist, conf.row_dist), 0.5*(conf.first_coord[1] + conf.last_coord[1]))
-    special_gap_degs = meters_to_dec_degrees((conf.special_gap, conf.row_dist), 0.5*(conf.first_coord[1] + conf.last_coord[1]))
+    mean_lat = (conf.first_coord[1] + conf.last_coord[1]) * 0.5
+    plot_size_degs = meters_to_dec_degrees(conf.plot_size, mean_lat)
+    plot_gap_degs = meters_to_dec_degrees((conf.col_dist, conf.row_dist), mean_lat)
+    special_gap_degs = meters_to_dec_degrees((conf.special_gap, conf.row_dist), mean_lat)
     
 
     
