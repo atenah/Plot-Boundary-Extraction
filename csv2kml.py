@@ -54,7 +54,7 @@ def record_cell(xml, f_main, f_points, coords, coord_pt, id_val):
 def dec_degrees_to_meters((x1, y1), (x2, y2)):
     mean_lat = radians((y1 + y2) * 0.5)
     xdist = abs((x2 - x1) * (111412.84 * cos(mean_lat) - 93.5 * cos(3*mean_lat) + 0.118 * cos(5*mean_lat)))
-    ydist = abs((y2 - y1) * (111132.92 - 558.92 * cos(2*mean_lat) + 1.175*cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
+    ydist = abs((y2 - y1) * (111132.92 - 558.92 * cos(2*mean_lat) + 1.175 * cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
     return xdist, ydist
 
 
@@ -76,18 +76,16 @@ def get_coords(x, y, (dx, dy), (xdir, ydir)):
     return coord, coord_pt
 
 def main(conf, inputFile):
-    width = abs(conf.first_coord[0] - conf.last_coord[0])
-    height = abs(conf.first_coord[1] - conf.last_coord[1])    
-    wm, hm = dec_degrees_to_meters(conf.first_coord, conf.last_coord)
+    widthInMeters, heightInMeters = dec_degrees_to_meters(conf.first_coord, conf.last_coord)
 
     
-    print "Width:", wm, "m"
-    print "Height:", hm, "m"
+    print "Width:", widthInMeters, "m"
+    print "Height:", heightInMeters, "m"
 
     plots_size = inputFile.ncols * conf.plot_size[0] + (inputFile.ncols - 1 - len(conf.special_cols)) * conf.col_dist + len(conf.special_cols) * conf.special_gap, inputFile.nrows * conf.plot_size[1] + (inputFile.nrows - 1) * conf.row_dist
     print "Size based on plot input file", plots_size
 
-    scaling_factor = wm/plots_size[0], hm/plots_size[1]
+    scaling_factor = widthInMeters/plots_size[0], heightInMeters/plots_size[1]
 
     conf.scale(scaling_factor)
     
