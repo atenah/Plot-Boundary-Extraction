@@ -62,7 +62,7 @@ def dec_degrees_to_meters((x1, y1), (x2, y2)):
 def meters_to_dec_degrees((dx, dy), mean_lat):
     mean_lat = radians(mean_lat)
     xdist = abs(dx / (111412.84 * cos(mean_lat) - 93.5 * cos(3*mean_lat) + 0.118 * cos(5*mean_lat)))
-    ydist = abs(dy / (111132.92 - 558.92 * cos(2*mean_lat) + 1.175*cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
+    ydist = abs(dy / (111132.92 - 558.92 * cos(2*mean_lat) + 1.175 * cos(4*mean_lat) - 0.0023 * cos(6*mean_lat)))
     return xdist, ydist
     
 
@@ -93,9 +93,10 @@ def main(conf, inputFile):
     print "Scaled size based on plot input file", plots_size
 
     
-    plot_size_degs = meters_to_dec_degrees(conf.plot_size, 0.5*(conf.first_coord[1] + conf.last_coord[1]))
-    plot_gap_degs = meters_to_dec_degrees((conf.col_dist, conf.row_dist), 0.5*(conf.first_coord[1] + conf.last_coord[1]))
-    special_gap_degs = meters_to_dec_degrees((conf.special_gap, conf.row_dist), 0.5*(conf.first_coord[1] + conf.last_coord[1]))
+    mean_lat = (conf.first_coord[1] + conf.last_coord[1]) * 0.5
+    plot_size_degs = meters_to_dec_degrees(conf.plot_size, mean_lat)
+    plot_gap_degs = meters_to_dec_degrees((conf.col_dist, conf.row_dist), mean_lat)
+    special_gap_degs = meters_to_dec_degrees((conf.special_gap, conf.row_dist), mean_lat)
     
 
     
