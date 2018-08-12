@@ -91,11 +91,11 @@ def main(conf, inputFile):
     plots_size = compute_plots_size(inputFile, conf)
     print "Size based on plot input file", plots_size
 
-    conf.scale(widthInMeters/plots_size[0], heightInMeters/plots_size[1])
+    scaling_factor = widthInMeters/plots_size[0], heightInMeters/plots_size[1]
+    conf.scale(scaling_factor)
     
     plots_size = compute_plots_size(inputFile, conf)
     print "Scaled size based on plot input file", plots_size
-
     
     mean_lat = (conf.first_coord[1] + conf.last_coord[1]) * 0.5
     plot_size_degs = meters_to_dec_degrees(conf.plot_size, mean_lat)
@@ -103,7 +103,6 @@ def main(conf, inputFile):
     special_gap_degs = meters_to_dec_degrees((conf.special_gap, conf.row_dist), mean_lat)
     
 
-    
     xml = XmlKmlBuilder()
     d = xml.create_el_document()
 
@@ -122,17 +121,17 @@ def main(conf, inputFile):
     add_style_to_folder(f_main, xml)
     addstyle_map_to_folder(f_main, xml)
 
-    # left-top `Placemark`
+    # bottom-right `Placemark`
     pm = xml.create_el_placemark(f_origin_points)
     xml.create_el_name(pm, 'Punto 1')
     pt = xml.create_el_point(pm)
     xml.create_el_coordinates(pt, ",".join(map(str, conf.first_coord)) + ",0")
 
-    # bottom-right `Placemark`
+    # left-top `Placemark`
     pm = xml.create_el_placemark(f_origin_points)
     xml.create_el_name(pm, 'Punto 2')
     pt = xml.create_el_point(pm)
-    xml.create_el_coordinates(pt, ",".join(map(str, conf.first_coord)) + ",0")
+    xml.create_el_coordinates(pt, ",".join(map(str, conf.last_coord)) + ",0")
 
 
     not_empty_elements = []
@@ -198,14 +197,8 @@ def main(conf, inputFile):
     print col_ind, "columns"
     print row_ind, "rows"
 
-#   Input variables:
-#   --y1
-#   --x1
-#   --y2
-#   --x2
-#   -f --input-file
+#   Command-line parameter: configuration file name
 if __name__ == "__main__":
-
     conf = XMLConfigFile(sys.argv[1])
     inputFile = InputFile(conf.input_filename)
     main(conf, inputFile)
